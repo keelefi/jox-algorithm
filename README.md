@@ -108,7 +108,7 @@ Here's the current status of the various implementations:
 
 | Language | Tests Created | Tests Passing |
 | --- | --- | --- |
-| Python | :heavy_check_mark: | :x: |
+| Python | :heavy_check_mark: | ![Python](https://github.com/keelefi/jox-algorithm/actions/workflows/python.yml/badge.svg) |
 | JavaScript | :heavy_check_mark: | :x: |
 | C++ | :heavy_check_mark: | :x: |
 | Golang | :heavy_check_mark: | :x: |
