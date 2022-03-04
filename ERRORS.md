@@ -1,7 +1,10 @@
 # Errors
 
-This section lists the possible errors the algorithm can encounter. Note that the algorithm needs to report each error
-it encounters, respectively.
+This file lists the possible errors and warnings the algorithm can encounter. When an error is encountered, the
+execution of the algorithm must stop immediately and the error must be returned. Furthermore, in error scenarios the
+contents of the output jobs and warnings are undefined. Conversely, when a warning is encountered, execution must
+continue. As execution halts upon the first encountered error, there can only be one error at a time. However, there can
+be several warnings, even of the same type, in one execution.
 
 ## Cyclic Dependency
 
