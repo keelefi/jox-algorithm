@@ -1,0 +1,42 @@
+name: cpp
+
+on:
+  push:
+    paths:
+    - '.github/workflows/cpp.yml'
+    - 'cpp/**'
+    - 'tests/**'
+
+env:
+  DEPENDENCIES:
+    build-essential
+    cmake
+    autoconf
+    autoconf-archive
+    libgtest-dev
+    libgmock-dev
+    nlohmann-json3-dev
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Packages
+        run: sudo apt-get install $DEPENDENCIES
+      - name: Build gtest
+        working-directory: /usr/src/gtest/
+        run: |
+          sudo cmake CMakeLists.txt
+          sudo make
+          sudo cp ./lib/libgtest*.a /usr/local/lib
+      - name: Build algorithm
+        working-directory: cpp/
+        run: |
+          autoreconf -vif
+          ./configure
+          make
+      - name: Run Tests
+        working-directory: cpp/
+        run: src/test_algorithm
