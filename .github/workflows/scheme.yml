@@ -1,0 +1,30 @@
+name: Scheme
+
+on:
+  push:
+    paths:
+    - '.github/workflows/scheme.yml'
+    - 'scheme/**'
+    - 'tests/**'
+
+env:
+  DEPENDENCIES:
+    build-essential
+    guile-3.0-dev
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Packages
+        run: sudo apt-get install $DEPENDENCIES
+      - name: Checkout guile-json repo
+        uses: actions/checkout@v3
+        with:
+          repository: aconchillo/guile-json
+          path: scheme/guile-json/
+      - name: Run Tests
+        working-directory: scheme/
+        run: GUILE_LOAD_PATH=$GITHUB_WORKSPACE/scheme/guile-json/ guile algorithm_test.scm
