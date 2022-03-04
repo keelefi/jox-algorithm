@@ -112,5 +112,5 @@ Here's the current status of the various implementations:
 | JavaScript | :heavy_check_mark: | ![javascript](https://github.com/keelefi/jox-algorithm/actions/workflows/javascript.yml/badge.svg) |
 | C++ | :heavy_check_mark: | ![C++](https://github.com/keelefi/jox-algorithm/actions/workflows/cpp.yml/badge.svg) |
 | Golang | :heavy_check_mark: | ![golang](https://github.com/keelefi/jox-algorithm/actions/workflows/golang.yml/badge.svg) |
-| Scheme | :heavy_check_mark: | :x: |
+| Scheme | :heavy_check_mark: | ![Scheme](https://github.com/keelefi/jox-algorithm/actions/workflows/scheme.yml/badge.svg) |
 
