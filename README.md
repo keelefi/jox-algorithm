@@ -69,3 +69,5 @@ Here's the current status of the various implementations:
 | Golang | :heavy_check_mark: | ![golang](https://github.com/keelefi/jox-algorithm/actions/workflows/golang.yml/badge.svg) |
 | Scheme | :heavy_check_mark: | ![Scheme](https://github.com/keelefi/jox-algorithm/actions/workflows/scheme.yml/badge.svg) |
 
+Note: Scheme tests pass, but this is incorrect. The tests return 0 even though they fail and therefore they are
+considered passing altough they fail.
