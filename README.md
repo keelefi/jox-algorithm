@@ -1,24 +1,37 @@
-# Algorithm
+# jox-algorithm
 
-This directory structure contains tests and implementations of the main algorithm needed for `jox` to run. We have a
-standardized set of test cases that each language implementation needs to pass before being accepted. To keep all the
-test cases across different languages in sync, we store the test case data as JSON.
+This repository contains 5 different implementations of the [jox](https://github.com/keelefi/jox/) algorithm. The
+repository contains a standardized set of test cases. All implementations are tested using the same tests.
 
-## Requirements
+## Algorithm
 
-Before running the actual algorithm, the initial state of the graph structure of jobs needs to be loaded. Thereafter the
-algorithm runs.
-
-The algorithm needs to traverse all jobs. For each job the algorithm needs to add the counterpart for each `after` and
-`before`, respectively. For example, if job `B` is `after` job `A`, then job `A` must be `before` job `B`.
+To run, `jox` needs to know all the pairs of `after` and `before` ordering of jobs. As the user of `jox` needs to only
+state either `after` or `before` for each pair, `jox` needs to build all the missing directives.
 
 ## Job
 
-As we are developing the job dependency graph algorithm, our definition of a job can be far simplified. We need only job
-`name`, `after` and `before`. This is expressed in JSON as follows:
+Every `job` has a name, a list of jobs that are `after` and a list of jobs that are `before`. Job names are their unique
+identifiers. The lists of jobs `after` and `before` address the other jobs by their unique identifiers, i.e. their
+names.
+
+The JSON representation of a job is as follows:
 
 ```
 "<name>": {"after": ["<after1>","<after2>",...,"<afterN>"], "before": ["<before1>","<before2>",...,"<beforeN>"]}
+```
+
+## Errors and Warnings
+
+When running the algorithm, errors or warnings can occur. The exact errors and warnings are documented in `ERRORS.md`.
+
+The JSON representation of a error is as follows:
+
+```
+{
+    "type": <"ERROR"|"WARNING">,
+    "error": "<error id>",
+    "message": "<error message>"
+}
 ```
 
 ## Tests
@@ -40,12 +53,6 @@ denote the optional errors that are expected to be encountered. The file structu
 ```
 
 For a test case to pass, both expected `output` and `errors` need to match with the actual result, respectively.
-
-## Running
-
-Each langauge implementation comes with a shell script `run_tests.sh` which runs the tests and returns 0 if pass and 1
-if fail. In this directory the `run_tests.sh` will go through all implementations and run their tests, respectively. If
-any fail, it returns 1, otherwise it returns 0.
 
 ## Status
 
