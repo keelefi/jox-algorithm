@@ -17,7 +17,10 @@ names.
 The JSON representation of a job is as follows:
 
 ```
-"<name>": {"after": ["<after1>","<after2>",...,"<afterN>"], "before": ["<before1>","<before2>",...,"<beforeN>"]}
+"<name>": {
+    "after": ["<after1>","<after2>",...,"<afterN>"],
+    "before": ["<before1>","<before2>",...,"<beforeN>"]
+}
 ```
 
 ## Errors and Warnings
