@@ -8,7 +8,6 @@ from os.path import isfile, join
 import json
 
 import algorithm
-import job
 
 PATH_TO_TESTS='../tests/'
 
@@ -40,7 +39,7 @@ class TestAlgorithm(unittest.TestCase):
         # setup input jobs
         jobs = {}
         for input_job in test_data['input']:
-            jobs[input_job] = job.Job(input_job, test_data['input'][input_job])
+            jobs[input_job] = test_data['input'][input_job]
 
         # setup targets
         targets = test_data['targets']
@@ -48,7 +47,7 @@ class TestAlgorithm(unittest.TestCase):
         # setup output jobs
         jobs_expected = {}
         for output_job in test_data['output']:
-            jobs_expected[output_job] = job.Job(output_job, test_data['output'][output_job])
+            jobs_expected[output_job] = test_data['output'][output_job]
 
         # setup expected errors
         exception_expected = None
