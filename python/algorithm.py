@@ -1,3 +1,5 @@
+import copy
+
 class AlgorithmException(Exception):
     def __init__(self, message):
         self.message = message
@@ -40,5 +42,9 @@ class JobNotRequiredWarning(AlgorithmWarning):
         super().__init__(self.message)
 
 def algorithm(jobs, targets):
+    jobs_output = copy.deepcopy(jobs)
+    warnings = []
+
     # TODO: implementation
-    pass
+
+    return jobs_output, warnings

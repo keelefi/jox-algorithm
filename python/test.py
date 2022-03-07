@@ -73,7 +73,7 @@ class TestAlgorithm(unittest.TestCase):
             the_exception = context_manager.exception
             self.assertEqual(the_exception, exception_expected, 'Actual exception does not match expected exception')
         else:
-            warnings = algorithm.algorithm(jobs, targets)
+            jobs_actual, warnings = algorithm.algorithm(jobs, targets)
 
-            self.assertEqual(jobs, jobs_expected, 'Actual jobs do not match expected output jobs')
+            self.assertEqual(jobs_actual, jobs_expected, 'Actual jobs do not match expected output jobs')
             self.assertEqual(warnings, warnings_expected, 'Actual warnings do not match expected warnings')
