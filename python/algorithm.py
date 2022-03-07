@@ -29,6 +29,12 @@ class JobNotFoundException(AlgorithmException):
         self.message = message_template.format(depender=job_depender, dependee=job_dependee)
         super().__init__(self.message)
 
+class TargetNotFoundException(AlgorithmException):
+    def __init__(self, job_name):
+        message_template = '\'targets\' references job \'{job_name}\', but job \'{job_name}\' does not exist'
+        self.message = message_template.format(job_name=job_name)
+        super().__init__(self.message)
+
 class AlgorithmWarning():
     def __init__(self, message):
         self.message = message
