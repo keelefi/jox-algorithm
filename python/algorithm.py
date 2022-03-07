@@ -34,6 +34,11 @@ class AlgorithmWarning():
     def __eq__(self, other):
         return self.message == other.message
 
+class JobNotRequiredWarning(AlgorithmWarning):
+    def __init__(self, job_name):
+        self.message = 'Job \'{}\' is not required'.format(job_name)
+        super().__init__(self.message)
+
 def algorithm(jobs, targets):
     # TODO: implementation
     pass
