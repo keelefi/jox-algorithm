@@ -29,7 +29,7 @@ class NoTargetsError extends AlgorithmError {
 
 class JobNotFoundError extends AlgorithmError {
     constructor(job_depender, job_dependee) {
-        super(`Job '${job_depender}' depends on job '${job_dependee}', but job '${job_dependee}' does not exist`);
+        super(`Job '${job_depender}' references job '${job_dependee}', but job '${job_dependee}' does not exist`);
         this.name = 'JobNotFoundError';
         this.job_depender = job_depender;
         this.job_dependee = job_dependee;
