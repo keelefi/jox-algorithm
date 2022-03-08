@@ -50,6 +50,13 @@ class AlgorithmWarning {
     }
 }
 
+class JobNotRequiredWarning extends AlgorithmWarning {
+    constructor(job_name) {
+        super(`Job '${job_name}' is not required`);
+        this.job_name = job_name;
+    }
+}
+
 exports.algorithm = function (jobs, targets) {
     let jobs_actual = jobs;
     let warnings = [];
@@ -63,3 +70,4 @@ exports.algorithm = function (jobs, targets) {
 }
 
 exports.AlgorithmError = AlgorithmError;
+exports.AlgorithmWarning = AlgorithmWarning;
