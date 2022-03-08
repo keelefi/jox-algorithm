@@ -36,6 +36,14 @@ class JobNotFoundError extends AlgorithmError {
     }
 }
 
+class TargetNotFoundError extends AlgorithmError {
+    constructor(job_name) {
+        super(`'targets' references job '${job_name}', but job '${job_name}' does not exist`);
+        this.name = 'TargetNotFoundError';
+        this.job_name = job_name;
+    }
+}
+
 class AlgorithmWarning {
     constructor(message) {
         this.message = message;
