@@ -1,3 +1,8 @@
+const v8 = require('v8');
+const structuredClone = obj => {
+  return v8.deserialize(v8.serialize(obj));
+};
+
 class AlgorithmError extends Error {
     constructor(message) {
         super(message);
@@ -58,13 +63,13 @@ class JobNotRequiredWarning extends AlgorithmWarning {
 }
 
 exports.algorithm = function (jobs, targets) {
-    let jobs_actual = jobs;
+    let jobs_output = structuredClone(jobs);
     let warnings = [];
 
     // TODO: implementation
 
     return {
-        jobs_actual: jobs_actual,
+        jobs_actual: jobs_output,
         warnings: warnings,
     };
 }
