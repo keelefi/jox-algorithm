@@ -39,7 +39,7 @@ test_vector_files.forEach(test_vector_file =>
         let warnings_expected = [];
         for (const error of test_data.errors) {
             if (error.type === ERROR_TYPE_WARNING) {
-                warnings_expected.push(error.message);
+                warnings_expected.push(new algorithm.AlgorithmWarning(error.message));
             } else if (error.type === ERROR_TYPE_ERROR) {
                 if (exception_expected) {
                     throw new Error('exception redifined, this is not allowed');
