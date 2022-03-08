@@ -96,3 +96,6 @@
 
 (run-test-cases test-filenames)
 
+(if (< 0 (test-runner-fail-count (test-runner-get)))
+    (exit 1)
+    (exit 0))
