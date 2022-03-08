@@ -66,7 +66,88 @@ exports.algorithm = function (jobs, targets) {
     let jobs_output = structuredClone(jobs);
     let warnings = [];
 
-    // TODO: implementation
+    // check if targets is empty
+    if (targets.length == 0) {
+        throw new NoTargetsError();
+    }
+
+    // build all pairs
+    for (const job in jobs_output) {
+        if ('after' in jobs_output[job]) {
+            for (const job_after of jobs_output[job]['after']) {
+                if (!(job_after in jobs_output)) {
+                    throw new JobNotFoundError(job, job_after);
+                }
+                if (job == job_after) {
+                    throw new JobDependsOnItselfError(job);
+                }
+                if ('before' in jobs_output[job_after]) {
+                    if (!(jobs_output[job_after]['before'].includes(job))) {
+                        jobs_output[job_after]['before'].push(job);
+                    }
+                } else {
+                    jobs_output[job_after]['before'] = [job];
+                }
+            }
+        }
+
+        if ('before' in jobs_output[job]) {
+            for (const job_before of jobs_output[job]['before']) {
+                if (!(job_before in jobs_output)) {
+                    throw new JobNotFoundError(job, job_before);
+                }
+                if (job == job_before) {
+                    throw new JobDependsOnItselfError(job);
+                }
+                if ('after' in jobs_output[job_before]) {
+                    if (!(jobs_output[job_before]['after'].includes(job))) {
+                        jobs_output[job_before]['after'].push(job);
+                    }
+                } else {
+                    jobs_output[job_before]['after'] = [job];
+                }
+            }
+        }
+    }
+
+    // collect list of needed jobs and check cyclic dependencies
+    let jobs_needed = [];
+    for (const target of targets) {
+        if (!(target in jobs_output)) {
+            throw new TargetNotFoundError(target);
+        }
+
+        let target_needs = [target];
+        function check_cyclic_dependencies(jobs_output, jobs_needed, job_current, target_needs) {
+            if ('after' in jobs_output[job_current]) {
+                for (const job_after of jobs_output[job_current]['after']) {
+                    if (jobs_needed.includes(job_after)) {
+                        throw new CyclicDependencyError();
+                    }
+                    jobs_needed_copy = structuredClone(jobs_needed);
+                    jobs_needed_copy.push(job_after);
+                    if (!(job_after in target_needs)) {
+                        target_needs.push(job_after);
+                    }
+                    check_cyclic_dependencies(jobs_output, jobs_needed_copy, job_after, target_needs);
+                }
+            }
+        }
+        check_cyclic_dependencies(jobs_output, [], target, target_needs);
+
+        for (const job_needed of target_needs) {
+            if (!(job_needed in jobs_needed)) {
+                jobs_needed.push(job_needed);
+            }
+        }
+    }
+
+    // check that every job is needed
+    for (const job in jobs) {
+        if (!(jobs_needed.includes(job))) {
+            warnings.push(new JobNotRequiredWarning(job));
+        }
+    }
 
     return {
         jobs_actual: jobs_output,
