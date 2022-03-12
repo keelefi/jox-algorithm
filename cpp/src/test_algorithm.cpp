@@ -7,8 +7,12 @@
 #include <gmock/gmock.h>
 #include <nlohmann/json.hpp>
 
+#include <map>
 #include <filesystem>
 #include <fstream>
+#include <set>
+#include <string>
+#include <vector>
 
 const std::filesystem::path PATH_TO_TESTS{"../tests/"};
 
