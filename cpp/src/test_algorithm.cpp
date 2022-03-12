@@ -17,14 +17,14 @@ const std::string ERROR_TYPE_ERROR{"ERROR"};
 
 std::ostream& operator<<(std::ostream& out, const algorithm::job& job_to_string)
 {
-    std::string result = "Job: {name: '" + job_to_string.get_name() + "'";
+    std::string result = "";
 
     auto after = job_to_string.get_after();
     auto before = job_to_string.get_before();
 
     if (!after.empty())
     {
-        result += ", after: [";
+        result += "after: [";
         for (const auto& str : after)
         {
             result += "'" + str + "', ";
@@ -34,7 +34,11 @@ std::ostream& operator<<(std::ostream& out, const algorithm::job& job_to_string)
     }
     if (!before.empty())
     {
-        result += ", before: [";
+        if (!after.empty())
+        {
+            result += ", ";
+        }
+        result += "before: [";
         for (const auto& str : before)
         {
             result += "'" + str + "', ";
@@ -42,8 +46,6 @@ std::ostream& operator<<(std::ostream& out, const algorithm::job& job_to_string)
         result.erase(result.length()-2, 2);
         result += "]";
     }
-
-    result += "}";
 
     out << result;
     return out;
@@ -57,19 +59,19 @@ std::ostream& operator<<(std::ostream& out, const algorithm::warning& warning_to
     return out;
 }
 
-std::vector<algorithm::job> jobs_from_json(const nlohmann::json& j)
+std::map<std::string, algorithm::job> jobs_from_json(const nlohmann::json& j)
 {
-    std::vector<algorithm::job> result;
+    std::map<std::string, algorithm::job> result;
 
     for (auto& iter : j.items())
     {
         std::string name = iter.key();
-        std::vector<std::string> after;
-        std::vector<std::string> before;
+        std::set<std::string> after;
+        std::set<std::string> before;
 
         try
         {
-            after = iter.value().at("after").get<std::vector<std::string>>();
+            after = iter.value().at("after").get<std::set<std::string>>();
         }
         catch (nlohmann::json::out_of_range& e)
         {
@@ -77,13 +79,13 @@ std::vector<algorithm::job> jobs_from_json(const nlohmann::json& j)
 
         try
         {
-            before = iter.value().at("before").get<std::vector<std::string>>();
+            before = iter.value().at("before").get<std::set<std::string>>();
         }
         catch (nlohmann::json::out_of_range& e)
         {
         }
 
-        result.emplace_back(name, after, before);        
+        result.emplace(name, algorithm::job(after, before));
     }
 
     return result;

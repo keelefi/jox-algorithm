@@ -3,7 +3,7 @@
 namespace algorithm
 {
 
-std::set<warning> algorithm(std::vector<job>& jobs, const std::vector<std::string>& targets)
+std::set<warning> algorithm(std::map<std::string, job>& jobs, const std::vector<std::string>& targets)
 {
     std::set<warning> warnings;
 
