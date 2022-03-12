@@ -26,5 +26,11 @@ private:
     std::string m_message;
 };
 
+class job_not_required_warning : public warning
+{
+public:
+    job_not_required_warning(const std::string&);
+};
+
 } // namespace algorithm
 

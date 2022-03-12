@@ -43,5 +43,11 @@ std::string warning::get_message() const
     return m_message;
 }
 
+job_not_required_warning::job_not_required_warning(const std::string& job_name) :
+    warning(JOB_NOT_REQUIRED,
+            "Job '" + job_name + "' is not required")
+{
+}
+
 } // namespace algorithm
 
