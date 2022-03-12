@@ -27,6 +27,15 @@ bool warning::operator==(const warning& other) const
             (m_message == other.m_message);
 }
 
+bool warning::operator<(const warning& other) const
+{
+    if (m_warning != other.m_warning)
+    {
+        return m_warning < other.m_warning;
+    }
+    return m_message < other.m_message;
+}
+
 std::string warning::get_warning() const
 {
     switch (m_warning)

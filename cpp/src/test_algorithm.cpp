@@ -138,7 +138,7 @@ TEST_P(AlgorithmTest, AlgorithmWorksCorrectly)
     auto jobs_expected = jobs_from_json(root["output"]);
 
     // read warnings and errors
-    std::vector<algorithm::warning> warnings_expected;
+    std::set<algorithm::warning> warnings_expected;
     std::string exception_expected;
     for (const auto& error : root["errors"])
     {
@@ -148,7 +148,7 @@ TEST_P(AlgorithmTest, AlgorithmWorksCorrectly)
         }
         else if (error["type"] == ERROR_TYPE_WARNING)
         {
-            warnings_expected.emplace_back(algorithm::warning_type_decode(error["error"]), error["message"]);
+            warnings_expected.emplace(algorithm::warning_type_decode(error["error"]), error["message"]);
         }
         else
         {

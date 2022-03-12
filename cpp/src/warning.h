@@ -18,6 +18,7 @@ public:
     warning(const WARNING_TYPE, const std::string&);
 
     bool operator==(const warning&) const;
+    bool operator<(const warning&) const;
 
     std::string get_warning() const;
     std::string get_message() const;

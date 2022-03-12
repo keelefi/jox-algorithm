@@ -3,9 +3,9 @@
 namespace algorithm
 {
 
-std::vector<warning> algorithm(std::vector<job>& jobs, const std::vector<std::string>& targets)
+std::set<warning> algorithm(std::vector<job>& jobs, const std::vector<std::string>& targets)
 {
-    std::vector<warning> warnings;
+    std::set<warning> warnings;
 
     // TODO: implementation
 

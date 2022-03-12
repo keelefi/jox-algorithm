@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <string>
 #include <vector>
 
@@ -9,7 +10,7 @@
 namespace algorithm
 {
 
-std::vector<warning> algorithm(std::vector<algorithm::job>& jobs, const std::vector<std::string>& targets);
+std::set<warning> algorithm(std::vector<algorithm::job>& jobs, const std::vector<std::string>& targets);
 
 } // namespace algorithm
 
