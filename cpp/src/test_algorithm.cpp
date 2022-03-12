@@ -168,7 +168,6 @@ TEST_P(AlgorithmTest, AlgorithmWorksCorrectly)
     {
         auto warnings = algorithm::algorithm(jobs, targets);
 
-        // TODO: better formatting of the failure logs
         EXPECT_THAT(jobs, testing::ContainerEq(jobs_expected));
         EXPECT_EQ(warnings, warnings_expected);
     }
