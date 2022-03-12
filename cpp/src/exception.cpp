@@ -33,5 +33,13 @@ job_not_found_exception::job_not_found_exception(
 {
 }
 
+target_not_found_exception::target_not_found_exception(
+            const std::string& job_name) noexcept :
+        algorithm_exception("'targets' references job '" + job_name +
+                            "', but job '" + job_name +
+                            "' does not exist")
+{
+}
+
 } // naemspace algorithm
 

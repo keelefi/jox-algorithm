@@ -36,5 +36,11 @@ public:
     job_not_found_exception(const std::string&, const std::string&) noexcept;
 };
 
+class target_not_found_exception: public algorithm_exception
+{
+public:
+    target_not_found_exception(const std::string&) noexcept;
+};
+
 } // namespace algorithm
 
