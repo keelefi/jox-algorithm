@@ -11,6 +11,29 @@ type Job struct {
     Before  []string
 }
 
+func (j Job) Copy() Job {
+    var result Job
+    result.Name = j.Name
+
+    result.After = make([]string, len(j.After))
+    copy(result.After, j.After)
+
+    result.Before = make([]string, len(j.Before))
+    copy(result.Before, j.Before)
+
+    return result
+}
+
+func DeepCopyJobs(jobs []Job) []Job {
+    result := make([]Job, len(jobs))
+
+    for i, v := range jobs {
+        result[i] = v.Copy()
+    }
+
+    return result
+}
+
 type ErrorType int
 
 const (
@@ -135,7 +158,7 @@ func (w *JobNotRequiredWarning) Warning() string {
 }
 
 func Algorithm(input []Job, targets []string) ([]Job, []AlgorithmWarning, error) {
-    var output []Job
+    output := DeepCopyJobs(input)
     var warnings []AlgorithmWarning
 
     // TODO: implementation
