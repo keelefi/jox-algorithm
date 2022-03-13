@@ -6,14 +6,12 @@ import (
 )
 
 type Job struct {
-    Name    string
     After   []string
     Before  []string
 }
 
 func (j Job) Copy() Job {
     var result Job
-    result.Name = j.Name
 
     result.After = make([]string, len(j.After))
     copy(result.After, j.After)
@@ -24,8 +22,8 @@ func (j Job) Copy() Job {
     return result
 }
 
-func DeepCopyJobs(jobs []Job) []Job {
-    result := make([]Job, len(jobs))
+func DeepCopyJobs(jobs map[string]Job) map[string]Job {
+    result := make(map[string]Job, len(jobs))
 
     for i, v := range jobs {
         result[i] = v.Copy()
@@ -157,7 +155,7 @@ func (w *JobNotRequiredWarning) Warning() string {
     return fmt.Sprintf("Job '%s' is not required", w.jobName)
 }
 
-func Algorithm(input []Job, targets []string) ([]Job, []AlgorithmWarning, error) {
+func Algorithm(input map[string]Job, targets []string) (map[string]Job, []AlgorithmWarning, error) {
     output := DeepCopyJobs(input)
     var warnings []AlgorithmWarning
 

@@ -14,9 +14,9 @@ import (
 const TEST_FILES_PATH = "../tests"
 
 type TestCaseData struct {
-    input           []Job
+    input           map[string]Job
     targets         []string
-    output          []Job
+    output          map[string]Job
     warnings        []AlgorithmWarning
     errorExpected   AlgorithmError
 }
@@ -41,7 +41,6 @@ func readStringSlice(data interface{}, key string) []string {
 func jsonToJob(key string, value interface{}) Job {
     var result Job
 
-    result.Name = key
     result.After = readStringSlice(value, "after")
     result.Before = readStringSlice(value, "before")
 
@@ -79,12 +78,10 @@ func getTestFiles(t *testing.T) ([]os.FileInfo, error) {
     return result, nil
 }
 
-func parseJobs(t *testing.T, data map[string]interface{}) []Job {
-    result := make([]Job, len(data))
-    i := 0
+func parseJobs(t *testing.T, data map[string]interface{}) map[string]Job {
+    result := make(map[string]Job, len(data))
     for key, value := range data {
-        result[i] = jsonToJob(key, value)
-        i = i + 1
+        result[key] = jsonToJob(key, value)
     }
     return result
 }
@@ -166,13 +163,13 @@ func TestAlgorithm(t *testing.T) {
             testCaseData := parseFile(t, testFile.Name())
 
             // TODO: remove these
-            for _, v := range testCaseData.input {
-                t.Logf("Job name: %s\n", v.Name)
+            for k, v := range testCaseData.input {
+                t.Logf("Job name: %s\n", k)
                 t.Logf("  after: %s\n", v.After)
                 t.Logf("  before: %s\n", v.Before)
             }
-            for _, v := range testCaseData.output {
-                t.Logf("Job name: %s\n", v.Name)
+            for k, v := range testCaseData.output {
+                t.Logf("Job name: %s\n", k)
                 t.Logf("  after: %s\n", v.After)
                 t.Logf("  before: %s\n", v.Before)
             }
