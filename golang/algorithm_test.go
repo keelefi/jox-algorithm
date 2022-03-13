@@ -41,9 +41,9 @@ func readStringSlice(data interface{}, key string) []string {
 func jsonToJob(key string, value interface{}) Job {
     var result Job
 
-    result.name = key
-    result.after = readStringSlice(value, "after")
-    result.before = readStringSlice(value, "before")
+    result.Name = key
+    result.After = readStringSlice(value, "after")
+    result.Before = readStringSlice(value, "before")
 
     return result
 }
@@ -167,14 +167,14 @@ func TestAlgorithm(t *testing.T) {
 
             // TODO: remove these
             for _, v := range testCaseData.input {
-                t.Logf("Job name: %s\n", v.name)
-                t.Logf("  after: %s\n", v.after)
-                t.Logf("  before: %s\n", v.before)
+                t.Logf("Job name: %s\n", v.Name)
+                t.Logf("  after: %s\n", v.After)
+                t.Logf("  before: %s\n", v.Before)
             }
             for _, v := range testCaseData.output {
-                t.Logf("Job name: %s\n", v.name)
-                t.Logf("  after: %s\n", v.after)
-                t.Logf("  before: %s\n", v.before)
+                t.Logf("Job name: %s\n", v.Name)
+                t.Logf("  after: %s\n", v.After)
+                t.Logf("  before: %s\n", v.Before)
             }
             for _, v := range testCaseData.targets {
                 t.Logf("  %s\n", v)

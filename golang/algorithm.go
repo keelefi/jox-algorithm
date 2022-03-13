@@ -6,9 +6,9 @@ import (
 )
 
 type Job struct {
-    name    string
-    after   []string
-    before  []string
+    Name    string
+    After   []string
+    Before  []string
 }
 
 type ErrorType int
