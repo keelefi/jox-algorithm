@@ -179,6 +179,10 @@ func TestAlgorithm(t *testing.T) {
             jobsActual, warningsActual, err := Algorithm(testCaseData.input, testCaseData.targets)
 
             if testCaseData.errorExpected.errorEnumeration == ErrorNone {
+                if err != nil {
+                    t.Errorf("did not expect error, got: '%s'", err.Error())
+                }
+
                 // No error expected, check jobsActual and warningsActual
                 jobsDiff := cmp.Diff(jobsActual, testCaseData.output)
                 if jobsDiff != "" {
