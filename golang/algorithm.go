@@ -144,6 +144,9 @@ type JobNotFoundError struct {
     depender    string
     dependee    string
 }
+type TargetNotFoundError struct {
+    jobName string
+}
 
 type JobNotRequiredWarning struct {
     jobName string
@@ -163,6 +166,10 @@ func (e *NoTargetsError) Error() string {
 
 func (e *JobNotFoundError) Error() string {
     return fmt.Sprintf("Job '%s' references job '%s', but job '%s' does not exist", e.depender, e.dependee, e.dependee)
+}
+
+func (e *TargetNotFoundError) Error() string {
+    return fmt.Sprintf("'targets' references job '%s', but job '%s' does not exist", e.jobName, e.jobName)
 }
 
 func (w *JobNotRequiredWarning) Warning() string {
