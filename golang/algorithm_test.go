@@ -115,8 +115,8 @@ func parseErrors(t *testing.T, data []interface{}) (warnings []AlgorithmWarning,
                 t.Fatalf("error: %s", err)
             }
             newWarning := AlgorithmWarning{
-                warningEnumeration: warningEnumeration,
-                message: v_map["message"].(string),
+                Enumeration:    warningEnumeration,
+                Message:        v_map["message"].(string),
             }
             warnings = append(warnings, newWarning)
         }
@@ -168,8 +168,8 @@ func TestAlgorithm(t *testing.T) {
             }
             t.Logf("  %s\n", SetToString(testCaseData.targets))
             for _, v := range testCaseData.warnings {
-                t.Logf("        enum: %s\n", v.warningEnumeration)
-                t.Logf("     message: %s\n", v.message)
+                t.Logf("        enum: %s\n", v.Enumeration)
+                t.Logf("     message: %s\n", v.Message)
             }
             if testCaseData.errorExpected.errorEnumeration != ErrorNone {
                 t.Logf("      enum: %s\n", testCaseData.errorExpected.errorEnumeration)

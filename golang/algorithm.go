@@ -131,8 +131,8 @@ type AlgorithmError struct {
 }
 
 type AlgorithmWarning struct {
-    warningEnumeration  WarningEnumeration
-    message             string
+    Enumeration WarningEnumeration
+    Message     string
 }
 
 type CyclicDependencyError struct {}
@@ -174,6 +174,13 @@ func (e *TargetNotFoundError) Error() string {
 
 func (w *JobNotRequiredWarning) Warning() string {
     return fmt.Sprintf("Job '%s' is not required", w.jobName)
+}
+
+func (w *JobNotRequiredWarning) ToWarning() AlgorithmWarning {
+    return AlgorithmWarning {
+        Enumeration:    WarningJobNotRequired,
+        Message:        w.Warning(),
+    }
 }
 
 func Algorithm(input map[string]Job, targets map[string]bool) (map[string]Job, []AlgorithmWarning, error) {
