@@ -187,7 +187,100 @@ func Algorithm(input map[string]Job, targets map[string]bool) (map[string]Job, [
     output := DeepCopyJobs(input)
     var warnings []AlgorithmWarning
 
-    // TODO: implementation
+    if len(targets) == 0 {
+        return nil, nil, &NoTargetsError{}
+    }
+
+    // build all pairs
+    for k, v := range output {
+        for jobAfterStr := range v.After {
+            jobAfter, ok := output[jobAfterStr]
+            if !ok {
+                err := &JobNotFoundError{
+                    depender: k,
+                    dependee: jobAfterStr,
+                }
+                return nil, nil, err
+            }
+            if jobAfterStr == k {
+                err := &JobDependsOnItselfError{
+                    jobName: k,
+                }
+                return nil, nil, err
+            }
+            if _, ok := jobAfter.Before[k]; !ok {
+                jobAfter.Before[k] = true
+            }
+        }
+        for jobBeforeStr := range v.Before {
+            jobBefore, ok := output[jobBeforeStr]
+            if !ok {
+                err := &JobNotFoundError{
+                    depender: k,
+                    dependee: jobBeforeStr,
+                }
+                return nil, nil, err
+            }
+            if jobBeforeStr == k {
+                err := &JobDependsOnItselfError{
+                    jobName: k,
+                }
+                return nil, nil, err
+            }
+            if _, ok := jobBefore.After[k]; !ok {
+                jobBefore.After[k] = true
+            }
+        }
+    }
+
+    // collect list of needed jobs and check cyclic dependencies
+    jobsNeeded := make(map[string]bool)
+    for target, _ := range targets {
+        if _, ok := output[target]; !ok {
+            err := &TargetNotFoundError{
+                jobName: target,
+            }
+            return nil, nil, err
+        }
+
+        targetNeeds := make(map[string]bool)
+        targetNeeds[target] = true
+
+        var checkCyclicDependencies func(map[string]bool, string) error
+        checkCyclicDependencies = func(jobsNeeded map[string]bool, jobCurrentStr string) error {
+            jobCurrent := output[jobCurrentStr]
+            for jobAfterStr, _ := range jobCurrent.After {
+                if _, ok := jobsNeeded[jobAfterStr]; ok {
+                    return &CyclicDependencyError{}
+                }
+                targetNeeds[jobAfterStr] = true
+                jobsNeededCopy := make(map[string]bool, len(jobsNeeded)+1)
+                for k, _ := range jobsNeeded {
+                    jobsNeededCopy[k] = true
+                }
+                jobsNeededCopy[jobCurrentStr] = true
+                if err := checkCyclicDependencies(jobsNeededCopy, jobAfterStr); err != nil {
+                    return err
+                }
+            }
+            return nil
+        }
+        if err := checkCyclicDependencies(make(map[string]bool), target); err != nil {
+            return nil, nil, err
+        }
+
+        for k, _ := range targetNeeds {
+            jobsNeeded[k] = true
+        }
+    }
+
+    // check that every job is needed
+    for k, _ := range output {
+        if _, ok := jobsNeeded[k]; !ok {
+            w := JobNotRequiredWarning{jobName: k}
+            warnings = append(warnings, w.ToWarning())
+        }
+    }
 
     return output, warnings, nil
 }
