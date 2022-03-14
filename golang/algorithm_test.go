@@ -155,27 +155,6 @@ func TestAlgorithm(t *testing.T) {
         t.Run(testFile.Name(), func (t *testing.T) {
             testCaseData := parseFile(t, testFile.Name())
 
-            // TODO: remove these
-            for k, v := range testCaseData.input {
-                t.Logf("Job name: %s\n", k)
-                t.Logf("  after: %s\n", SetToString(v.After))
-                t.Logf("  before: %s\n", SetToString(v.Before))
-            }
-            for k, v := range testCaseData.output {
-                t.Logf("Job name: %s\n", k)
-                t.Logf("  after: %s\n", SetToString(v.After))
-                t.Logf("  before: %s\n", SetToString(v.Before))
-            }
-            t.Logf("  %s\n", SetToString(testCaseData.targets))
-            for _, v := range testCaseData.warnings {
-                t.Logf("        enum: %s\n", v.Enumeration)
-                t.Logf("     message: %s\n", v.Message)
-            }
-            if testCaseData.errorExpected.errorEnumeration != ErrorNone {
-                t.Logf("      enum: %s\n", testCaseData.errorExpected.errorEnumeration)
-                t.Logf("   message: %s\n", testCaseData.errorExpected.message)
-            }
-
             jobsActual, warningsActual, err := Algorithm(testCaseData.input, testCaseData.targets)
 
             if testCaseData.errorExpected.errorEnumeration == ErrorNone {
