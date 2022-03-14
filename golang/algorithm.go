@@ -10,8 +10,8 @@ type Job struct {
     Before  map[string]bool
 }
 
-func SetToString(set map[string]bool) string {
-    result := "["
+func SetToString(set map[string]bool) (result string) {
+    result = "["
 
     for k, _ := range set {
         result += fmt.Sprintf(" %s ", k)
@@ -22,9 +22,7 @@ func SetToString(set map[string]bool) string {
     return result
 }
 
-func (j Job) Copy() Job {
-    var result Job
-
+func (j Job) Copy() (result Job) {
     result.After = make(map[string]bool, len(j.After))
     for k, v := range j.After {
         result.After[k] = v
@@ -38,8 +36,8 @@ func (j Job) Copy() Job {
     return result
 }
 
-func DeepCopyJobs(jobs map[string]Job) map[string]Job {
-    result := make(map[string]Job, len(jobs))
+func DeepCopyJobs(jobs map[string]Job) (result map[string]Job) {
+    result = make(map[string]Job, len(jobs))
 
     for i, v := range jobs {
         result[i] = v.Copy()

@@ -21,9 +21,7 @@ type TestCaseData struct {
     errorExpected   AlgorithmError
 }
 
-func readStringSet(data interface{}, key string) map[string]bool {
-    var result map[string]bool
-
+func readStringSet(data interface{}, key string) (result map[string]bool) {
     valueInterface, ok := data.(map[string]interface{})[key]
     if !ok {
         return make(map[string]bool, 0)
@@ -38,18 +36,14 @@ func readStringSet(data interface{}, key string) map[string]bool {
     return result
 }
 
-func jsonToJob(key string, value interface{}) Job {
-    var result Job
-
+func jsonToJob(key string, value interface{}) (result Job) {
     result.After = readStringSet(value, "after")
     result.Before = readStringSet(value, "before")
 
     return result
 }
 
-func filterFiles(files []os.FileInfo) []os.FileInfo {
-    var result []os.FileInfo
-
+func filterFiles(files []os.FileInfo) (result []os.FileInfo) {
     for _, v := range files {
         if v.IsDir() {
             continue
@@ -66,38 +60,39 @@ func filterFiles(files []os.FileInfo) []os.FileInfo {
     return result
 }
 
-func getTestFiles(t *testing.T) ([]os.FileInfo, error) {
+func getTestFiles(t *testing.T) (result []os.FileInfo, err error) {
     files, err := ioutil.ReadDir(TEST_FILES_PATH)
     if err != nil {
         t.Fatalf(fmt.Sprintf("Could not read test files path: %s", TEST_FILES_PATH))
         return nil, err
     }
 
-    result := filterFiles(files)
+    result = filterFiles(files)
 
     return result, nil
 }
 
-func parseJobs(t *testing.T, data map[string]interface{}) map[string]Job {
-    result := make(map[string]Job, len(data))
+func parseJobs(t *testing.T, data map[string]interface{}) (result map[string]Job) {
+    result = make(map[string]Job, len(data))
+
     for key, value := range data {
         result[key] = jsonToJob(key, value)
     }
+
     return result
 }
 
-func parseTargets(t *testing.T, data []interface{}) map[string]bool {
-    result := make(map[string]bool, len(data))
+func parseTargets(t *testing.T, data []interface{}) (result map[string]bool) {
+    result = make(map[string]bool, len(data))
+
     for _, v := range data {
         result[fmt.Sprintf("%s", v)] = true
     }
+
     return result
 }
 
-func parseErrors(t *testing.T, data []interface{}) ([]AlgorithmWarning, AlgorithmError) {
-    var warnings []AlgorithmWarning
-    var errorExpected AlgorithmError
-
+func parseErrors(t *testing.T, data []interface{}) (warnings []AlgorithmWarning, errorExpected AlgorithmError) {
     for _, v := range data {
         v_map := v.(map[string]interface{})
         errorType, err := GetErrorType(v_map["type"].(string))
@@ -130,13 +125,11 @@ func parseErrors(t *testing.T, data []interface{}) ([]AlgorithmWarning, Algorith
     return warnings, errorExpected
 }
 
-func parseFile(t *testing.T, filename string) TestCaseData {
+func parseFile(t *testing.T, filename string) (result TestCaseData) {
     content, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", TEST_FILES_PATH, filename))
     if err != nil {
         t.Fatalf("Could not read JSON file: %s", filename)
     }
-
-    var result TestCaseData
 
     var data map[string]interface{}
     err = json.Unmarshal(content, &data)
