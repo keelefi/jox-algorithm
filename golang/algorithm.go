@@ -6,18 +6,34 @@ import (
 )
 
 type Job struct {
-    After   []string
-    Before  []string
+    After   map[string]bool
+    Before  map[string]bool
+}
+
+func SetToString(set map[string]bool) string {
+    result := "["
+
+    for k, _ := range set {
+        result += fmt.Sprintf(" %s ", k)
+    }
+
+    result += "]"
+
+    return result
 }
 
 func (j Job) Copy() Job {
     var result Job
 
-    result.After = make([]string, len(j.After))
-    copy(result.After, j.After)
+    result.After = make(map[string]bool, len(j.After))
+    for k, v := range j.After {
+        result.After[k] = v
+    }
 
-    result.Before = make([]string, len(j.Before))
-    copy(result.Before, j.Before)
+    result.Before = make(map[string]bool, len(j.Before))
+    for k, v := range j.Before {
+        result.Before[k] = v
+    }
 
     return result
 }
@@ -155,7 +171,7 @@ func (w *JobNotRequiredWarning) Warning() string {
     return fmt.Sprintf("Job '%s' is not required", w.jobName)
 }
 
-func Algorithm(input map[string]Job, targets []string) (map[string]Job, []AlgorithmWarning, error) {
+func Algorithm(input map[string]Job, targets map[string]bool) (map[string]Job, []AlgorithmWarning, error) {
     output := DeepCopyJobs(input)
     var warnings []AlgorithmWarning
 

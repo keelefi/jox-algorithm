@@ -15,24 +15,24 @@ const TEST_FILES_PATH = "../tests"
 
 type TestCaseData struct {
     input           map[string]Job
-    targets         []string
+    targets         map[string]bool
     output          map[string]Job
     warnings        []AlgorithmWarning
     errorExpected   AlgorithmError
 }
 
-func readStringSlice(data interface{}, key string) []string {
-    var result []string
+func readStringSet(data interface{}, key string) map[string]bool {
+    var result map[string]bool
 
     valueInterface, ok := data.(map[string]interface{})[key]
     if !ok {
-        return make([]string, 0)
+        return make(map[string]bool, 0)
     }
 
     valueInterfaceSlice := valueInterface.([]interface{})
-    result = make([]string, len(valueInterfaceSlice))
-    for i, v := range valueInterfaceSlice {
-        result[i] = fmt.Sprintf("%s", v)
+    result = make(map[string]bool, len(valueInterfaceSlice))
+    for _, v := range valueInterfaceSlice {
+        result[fmt.Sprintf("%s", v)] = true
     }
 
     return result
@@ -41,8 +41,8 @@ func readStringSlice(data interface{}, key string) []string {
 func jsonToJob(key string, value interface{}) Job {
     var result Job
 
-    result.After = readStringSlice(value, "after")
-    result.Before = readStringSlice(value, "before")
+    result.After = readStringSet(value, "after")
+    result.Before = readStringSet(value, "before")
 
     return result
 }
@@ -86,10 +86,10 @@ func parseJobs(t *testing.T, data map[string]interface{}) map[string]Job {
     return result
 }
 
-func parseTargets(t *testing.T, data []interface{}) []string {
-    result := make([]string, len(data))
-    for i, v := range data {
-        result[i] = fmt.Sprintf("%s", v)
+func parseTargets(t *testing.T, data []interface{}) map[string]bool {
+    result := make(map[string]bool, len(data))
+    for _, v := range data {
+        result[fmt.Sprintf("%s", v)] = true
     }
     return result
 }
@@ -165,17 +165,15 @@ func TestAlgorithm(t *testing.T) {
             // TODO: remove these
             for k, v := range testCaseData.input {
                 t.Logf("Job name: %s\n", k)
-                t.Logf("  after: %s\n", v.After)
-                t.Logf("  before: %s\n", v.Before)
+                t.Logf("  after: %s\n", SetToString(v.After))
+                t.Logf("  before: %s\n", SetToString(v.Before))
             }
             for k, v := range testCaseData.output {
                 t.Logf("Job name: %s\n", k)
-                t.Logf("  after: %s\n", v.After)
-                t.Logf("  before: %s\n", v.Before)
+                t.Logf("  after: %s\n", SetToString(v.After))
+                t.Logf("  before: %s\n", SetToString(v.Before))
             }
-            for _, v := range testCaseData.targets {
-                t.Logf("  %s\n", v)
-            }
+            t.Logf("  %s\n", SetToString(testCaseData.targets))
             for _, v := range testCaseData.warnings {
                 t.Logf("        enum: %s\n", v.warningEnumeration)
                 t.Logf("     message: %s\n", v.message)
