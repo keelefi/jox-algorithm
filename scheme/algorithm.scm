@@ -53,6 +53,15 @@
     (make-job-not-found-exception-internal
         (format #f "Job '~a' references job '~a', but job '~a' does not exist" job-depender job-dependee job-dependee)))
 
+(define-exception-type
+    &target-not-found-exception
+    &algorithm-exception
+    make-target-not-found-exception-internal
+    target-not-found-exception?)
+(define (make-target-not-found-exception job-name)
+    (make-target-not-found-exception-internal
+        (format #f "'targets' references job '~a', but job '~a' does not exist" job-name)))
+
 (define (algorithm jobs targets)
     (define warnings '())
     ; TODO: implementation
