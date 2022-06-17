@@ -5,6 +5,7 @@ on:
     paths:
     - '.github/workflows/javascript.yml'
     - 'javascript/**'
+    - '!javascript/README.md'
     - 'tests/**'
 
 defaults:
