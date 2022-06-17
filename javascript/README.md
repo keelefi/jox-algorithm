@@ -1,9 +1,9 @@
 # Javascript
 
-Dependencies on Ubuntu 20.04:
+Dependencies:
 
-* `nodejs` (v10.19.0)
-* `npm` (6.14.4)
+* `nodejs` (v18.4.0)
+* `npm` (8.12.1)
 
 Install node dependencies:
 
