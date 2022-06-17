@@ -22,3 +22,17 @@ Uplifting minor dependencies:
 ```
 $ npm update
 ```
+
+## Docker
+
+To build with docker:
+
+```
+$ docker build -t jox-algorithm-javascript -f Dockerfile.javascript .
+```
+
+Run tests:
+
+```
+$ docker run jox-algorithm-javascript
+```
