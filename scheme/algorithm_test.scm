@@ -97,6 +97,8 @@
 (test-runner-current (test-runner-create))
 (run-test-cases test-filenames)
 
-(if (< 0 (test-runner-fail-count (test-runner-get)))
+(if (or
+        (< 0 (test-runner-fail-count (test-runner-get)))
+        (< 0 (test-runner-xpass-count (test-runner-get))))
     (exit 1)
     (exit 0))
