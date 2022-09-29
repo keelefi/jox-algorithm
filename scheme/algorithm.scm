@@ -60,7 +60,7 @@
     target-not-found-exception?)
 (define (make-target-not-found-exception job-name)
     (make-target-not-found-exception-internal
-        (format #f "'targets' references job '~a', but job '~a' does not exist" job-name)))
+        (format #f "'targets' references job '~a', but job '~a' does not exist" job-name job-name)))
 
 (define (algorithm jobs targets)
     (define warnings '())
