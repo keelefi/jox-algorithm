@@ -94,6 +94,7 @@
                 (run-test-cases (cdr filenames))))
         (else #t)))
 
+(test-runner-current (test-runner-create))
 (run-test-cases test-filenames)
 
 (if (< 0 (test-runner-fail-count (test-runner-get)))
