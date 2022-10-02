@@ -4,7 +4,7 @@ This project is built using autotools.
 
 First, run `autoconf` and `automake` with one commands:
 
-    $ autorecond -vif
+    $ autoreconf -vif
 
 Run the generated `configure` to resolve dependencies etc:
 
