@@ -84,21 +84,17 @@
 
 (define test-filenames (filter is-valid-file (get-test-file-names)))
 
-(define (run-test-cases filenames)
-    (cond
-        ((not (null? filenames))
-            (let* ((filename (car filenames)) (test-case-name (make-test-case-name filename)))
-                (test-begin test-case-name)
-                (run-test-case filename)
-                (test-end test-case-name)
-                (run-test-cases (cdr filenames))))
-        (else #t)))
+(define (filename-to-test-result filename)
+    (let ((test-case-name (make-test-case-name filename)))
+        (test-runner-current (test-runner-create))
+        (test-begin test-case-name)
+        (run-test-case filename)
+        (test-end test-case-name)
+        (test-runner-fail-count (test-runner-get))))
 
-(test-runner-current (test-runner-create))
-(run-test-cases test-filenames)
+(define test-results (map filename-to-test-result test-filenames))
 
-(if (or
-        (< 0 (test-runner-fail-count (test-runner-get)))
-        (< 0 (test-runner-xpass-count (test-runner-get))))
+;;; fail-count can never be negative. sum the results together and see if they're greater than zero.
+(if (< 0 (apply + test-results))
     (exit 1)
     (exit 0))
