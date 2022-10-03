@@ -64,5 +64,10 @@
 
 (define (algorithm jobs targets)
     (define warnings '())
+
     ; TODO: implementation
+
+    (if (null? targets)
+        (raise-exception (make-no-targets-exception)))
+
     (values jobs warnings))
