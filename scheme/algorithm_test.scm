@@ -54,13 +54,13 @@
 
     (define jobs-input (assoc "input" json-document))
     (define jobs-output (assoc "output" json-document))
-    (define targets (assoc "targets" json-document))
-    (define errors (assoc "errors" json-document))
+
+    (define targets (array->list (cdr (assoc "targets" json-document))))
+    (define errors (array->list (cdr (assoc "errors" json-document))))
 
     (define output-expected (cdr jobs-output))
-
-    (define warnings-expected (filter is-warning (array->list (cdr errors))))
-    (define error-expected (filter is-error (array->list (cdr errors))))
+    (define warnings-expected (filter is-warning errors))
+    (define error-expected (filter is-error errors))
 
     (cond 
         ((null? error-expected)
