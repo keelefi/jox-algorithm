@@ -6,21 +6,38 @@
 
 (use-modules (json))
 
-;;; auxiliary function to test equality of contents in alists
-(define (alist-equal? alist-left alist-right)
-    (define (alist-equal-internal? alist-left alist-right)
-        (define (alist-equal-element? pair alist)
-            (define second-pair (assoc (car pair) alist))
-            (cond
-                ((boolean? second-pair) #f)
-                (else (equal? (cdr pair) (cdr second-pair)))))
+(define (jobs-alist-equal? jobs-a jobs-b)
+    (define (sort-alist alist)
+        (sort alist (lambda (a b) (string< (car a) (car b)))))
+
+    (define (equal-jobs? job-a job-b)
+        (let ((job-a-name (car job-a))
+              (job-b-name (car job-b))
+              (job-a-after (sort (cdr (assoc "after" (cdr job-a))) string<))
+              (job-b-after (sort (cdr (assoc "after" (cdr job-b))) string<))
+              (job-a-before (sort (cdr (assoc "before" (cdr job-a))) string<))
+              (job-b-before (sort (cdr (assoc "before" (cdr job-b))) string<)))
+            (and
+                (equal? job-a-name job-b-name)
+                (equal? job-a-after job-b-after)
+                (equal? job-a-before job-b-before))))
+
+    (define (jobs-alist-sorted-equal? jobs-a-sorted jobs-b-sorted)
         (cond
-            ((null? alist-left) #t)
-            ((alist-equal-element? (car alist-left) alist-right) (alist-equal-internal? (cdr alist-left) alist-right))
-            (else #f)))
-    (cond
-        ((equal? (length alist-left) (length alist-right)) (alist-equal-internal? alist-left alist-right))
-        (else #f)))
+            ((null? jobs-a-sorted) (null? jobs-b-sorted))
+            ((null? jobs-b-sorted) #f)
+            (else
+                (let ((current-a (car jobs-a-sorted))
+                      (current-b (car jobs-b-sorted)))
+                    (if (not (equal-jobs? current-a current-b))
+                        #f
+                        (jobs-alist-sorted-equal? (cdr jobs-a-sorted) (cdr jobs-b-sorted)))))))
+
+    (if (not (= (length jobs-a) (length jobs-b)))
+        #f
+        (let ((jobs-a-sorted (sort-alist jobs-a))
+              (jobs-b-sorted (sort-alist jobs-b)))
+            (jobs-alist-sorted-equal? jobs-a-sorted jobs-b-sorted))))
 
 (include "algorithm.scm")
 
@@ -87,7 +104,7 @@
     (cond 
         ((null? error-expected)
             (let-values (((output-actual warnings-actual) (algorithm (cdr jobs-input) targets)))
-                (test-assert "output" (alist-equal? output-expected output-actual))
+                (test-assert "output" (jobs-alist-equal? output-expected output-actual))
                 (test-equal "warnings" warnings-expected warnings-actual)))
         (else
             (with-exception-handler
