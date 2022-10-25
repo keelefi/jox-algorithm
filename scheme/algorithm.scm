@@ -62,6 +62,9 @@
     (make-target-not-found-exception-internal
         (format #f "'targets' references job '~a', but job '~a' does not exist" job-name job-name)))
 
+(define (make-warning-job-not-needed job-name)
+    `(("message" . ,(format #f "Job '~a' is not required" job-name)) ("type" . "WARNING") ("error" . "JOB NOT REQUIRED")))
+
 (define (algorithm jobs targets)
     (define warnings '())
 
