@@ -60,6 +60,15 @@
           (alist (cdr jobs)))
         (cons key (map recreate-job alist))))
 
+(define (print-job job)
+    (let* ((job-name (car job))
+           (job-value (cdr job))
+           (after (cdr (assoc "after" job-value)))
+           (before (cdr (assoc "before" job-value))))
+        (display "name: ") (display job-name) (newline)
+        (display "after: ") (display after) (newline)
+        (display "before: ") (display before) (newline)))
+
 (define (run-test-case filename)
     (define json-document
         (with-input-from-file (string-append "../tests/" filename)
