@@ -47,13 +47,26 @@
 (define (is-warning error-obj)
     (equal? "WARNING" (cdr (assoc "type" error-obj))))
 
+(define (recreate-jobs jobs)
+    (define (recreate-job job)
+        (let* ((job-name (car job))
+              (job-value (cdr job))
+              (after-array (assoc "after" job-value))
+              (before-array (assoc "before" job-value))
+              (after-list (if after-array (array->list (cdr after-array)) '()))
+              (before-list (if before-array (array->list (cdr before-array)) '())))
+            `(,job-name . (("after" . ,after-list) ("before" . ,before-list)))))
+    (let ((key (car jobs))
+          (alist (cdr jobs)))
+        (cons key (map recreate-job alist))))
+
 (define (run-test-case filename)
     (define json-document
         (with-input-from-file (string-append "../tests/" filename)
             (lambda () (json->scm (current-input-port)))))
 
-    (define jobs-input (assoc "input" json-document))
-    (define jobs-output (assoc "output" json-document))
+    (define jobs-input (recreate-jobs (assoc "input" json-document)))
+    (define jobs-output (recreate-jobs (assoc "output" json-document)))
 
     (define targets (array->list (cdr (assoc "targets" json-document))))
     (define errors (array->list (cdr (assoc "errors" json-document))))
